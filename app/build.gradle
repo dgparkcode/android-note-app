@@ -57,4 +57,9 @@ dependencies {
     kaptTest "com.google.dagger:hilt-android-compiler:$hilt_version"
     androidTestImplementation "com.google.dagger:hilt-android-testing:$hilt_version" // For instrumented tests.
     kaptAndroidTest "com.google.dagger:hilt-android-compiler:$hilt_version"
+
+    // coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+
 }
