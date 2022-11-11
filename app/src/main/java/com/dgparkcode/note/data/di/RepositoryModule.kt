@@ -15,7 +15,7 @@ object RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideNoteRepository(noteEntityDao: NoteEntityDao):NoteRepository {
+    fun provideNoteRepository(noteEntityDao: NoteEntityDao): NoteRepository {
         return NoteRepositoryImpl(noteEntityDao)
     }
 }
