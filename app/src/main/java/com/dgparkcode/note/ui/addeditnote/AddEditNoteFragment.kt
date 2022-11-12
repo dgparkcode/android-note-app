@@ -25,19 +25,29 @@ class AddEditNoteFragment : Fragment(R.layout.fragment_add_edit_note) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupToolbarNavigation()
+        setupToolbarMenu()
+    }
 
-        val toolbar = binding.toolbar.root
-        toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
-        toolbar.setNavigationOnClickListener {
-            Log.d(TAG, "onViewCreated: back button clicked.")
-        }
-        toolbar.inflateMenu(R.menu.add_edit_note)
-        toolbar.setOnMenuItemClickListener { menuItem ->
-            if (menuItem.itemId == R.id.action_save) {
-                Log.d(TAG, "onViewCreated: save menu button clicked.")
-                return@setOnMenuItemClickListener true
+    private fun setupToolbarNavigation() {
+        with(binding.toolbar.root) {
+            setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
+            setNavigationOnClickListener {
+                Log.d(TAG, "onViewCreated: back button clicked.")
             }
-            return@setOnMenuItemClickListener false
+        }
+    }
+
+    private fun setupToolbarMenu() {
+        with(binding.toolbar.root) {
+            inflateMenu(R.menu.add_edit_note)
+            setOnMenuItemClickListener { menuItem ->
+                if (menuItem.itemId == R.id.action_save) {
+                    Log.d(TAG, "onViewCreated: save menu button clicked.")
+                    return@setOnMenuItemClickListener true
+                }
+                return@setOnMenuItemClickListener false
+            }
         }
     }
 
