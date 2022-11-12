@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.dgparkcode.note.R
 import com.dgparkcode.note.databinding.FragmentNoteListBinding
@@ -42,6 +43,11 @@ class NoteListFragment : Fragment(R.layout.fragment_note_list) {
             .also { adapter ->
                 noteItemListAdapter = adapter
             }
+
+        binding.fabAddNote.setOnClickListener {
+            val navController = findNavController()
+            navController.navigate(R.id.addEditNoteFragment)
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
