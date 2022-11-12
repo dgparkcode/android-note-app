@@ -10,4 +10,9 @@
         android:name="com.dgparkcode.note.ui.notelist.NoteListFragment"
         android:label="NoteListFragment"
         tools:layout="@layout/fragment_note_list" />
+    <fragment
+        android:id="@+id/addEditNoteFragment"
+        android:name="com.dgparkcode.note.ui.addeditnote.AddEditNoteFragment"
+        android:label="AddEditNoteFragment"
+        tools:layout="@layout/fragment_add_edit_note" />
 </navigation>
