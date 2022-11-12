@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.dgparkcode.note.domain.usecase.GetAllNotesUseCase
 import com.dgparkcode.note.ui.common.UserMessage
 import com.dgparkcode.note.ui.notelist.NoteItem
-import com.dgparkcode.note.ui.notelist.NoteListUiState
+import com.dgparkcode.note.ui.notelist.NoteListState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -17,8 +17,8 @@ class NoteListViewModel @Inject constructor(
     private val getAllNotesUseCase: GetAllNotesUseCase
 ) : ViewModel() {
 
-    private val _noteListUiState = MutableStateFlow(NoteListUiState())
-    val noteListUiState get() = _noteListUiState.asStateFlow()
+    private val _noteListState = MutableStateFlow(NoteListState())
+    val noteListUiState get() = _noteListState.asStateFlow()
 
     init {
         requestAllNotes()
@@ -27,7 +27,7 @@ class NoteListViewModel @Inject constructor(
     fun userMessageShown(messageId: Long) {
         viewModelScope.launch {
             if (messageId == noteListUiState.value.userMessage?.id) {
-                _noteListUiState.update { state ->
+                _noteListState.update { state ->
                     state.copy(userMessage = null)
                 }
             }
@@ -36,7 +36,7 @@ class NoteListViewModel @Inject constructor(
 
     private fun requestAllNotes() {
         viewModelScope.launch {
-            _noteListUiState.update { state ->
+            _noteListState.update { state ->
                 state.copy(isLoading = true)
             }
 
@@ -52,7 +52,7 @@ class NoteListViewModel @Inject constructor(
                             }
                         )
                     }
-                    _noteListUiState.update { state ->
+                    _noteListState.update { state ->
                         state.copy(
                             isLoading = false,
                             noteItems = noteItems
@@ -60,7 +60,7 @@ class NoteListViewModel @Inject constructor(
                     }
                 }
                 .catch { e ->
-                    _noteListUiState.update { state ->
+                    _noteListState.update { state ->
                         state.copy(
                             isLoading = false,
                             userMessage = UserMessage(
