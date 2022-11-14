@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.dgparkcode.note.databinding.ItemNoteListBinding
 
-class NoteItemListAdapter : ListAdapter<NoteItem, NoteItemListAdapter.ViewHolder>(diffCallback) {
+class NoteItemListAdapter(
+    private val onItemClick: (item: NoteItem) -> Unit = {}
+) : ListAdapter<NoteItem, NoteItemListAdapter.ViewHolder>(diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -15,7 +17,8 @@ class NoteItemListAdapter : ListAdapter<NoteItem, NoteItemListAdapter.ViewHolder
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            )
+            ),
+            onItemClick
         )
     }
 
@@ -26,13 +29,14 @@ class NoteItemListAdapter : ListAdapter<NoteItem, NoteItemListAdapter.ViewHolder
     }
 
     class ViewHolder(
-        private val binding: ItemNoteListBinding
+        private val binding: ItemNoteListBinding,
+        private val onItemClick: (item: NoteItem) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: NoteItem) {
             binding.tvTitle.text = item.title
             binding.tvContent.text = item.content
-            binding.root.setOnClickListener { item.onNoteClick() }
+            binding.root.setOnClickListener { onItemClick(item) }
         }
     }
 
