@@ -38,19 +38,7 @@ class NoteListFragment : Fragment(R.layout.fragment_note_list) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        with(binding.rvNoteList) {
-            addItemDecoration(
-                DividerItemDecoration(
-                    requireContext(),
-                    DividerItemDecoration.VERTICAL
-                )
-            )
-            adapter = NoteItemListAdapter { noteItem ->
-                moveToAddEditNote(noteItem.id)
-            }.also {
-                noteItemListAdapter = it
-            }
-        }
+        setupNoteList()
 
         binding.fabAddNote.setOnClickListener{
             moveToAddEditNote()
@@ -73,6 +61,22 @@ class NoteListFragment : Fragment(R.layout.fragment_note_list) {
 
                     noteItemListAdapter.submitList(state.noteItems)
                 }
+            }
+        }
+    }
+
+    private fun setupNoteList() {
+        with(binding.rvNoteList) {
+            addItemDecoration(
+                DividerItemDecoration(
+                    requireContext(),
+                    DividerItemDecoration.VERTICAL
+                )
+            )
+            adapter = NoteItemListAdapter { noteItem ->
+                moveToAddEditNote(noteItem.id)
+            }.also {
+                noteItemListAdapter = it
             }
         }
     }
