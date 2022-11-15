@@ -9,10 +9,20 @@
         android:id="@+id/noteListFragment"
         android:name="com.dgparkcode.note.ui.notelist.NoteListFragment"
         android:label="NoteListFragment"
-        tools:layout="@layout/fragment_note_list" />
+        tools:layout="@layout/fragment_note_list" >
+        <action
+            android:id="@+id/action_noteListFragment_to_addEditNoteFragment"
+            app:destination="@id/addEditNoteFragment"
+            app:popUpTo="@id/noteListFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
     <fragment
         android:id="@+id/addEditNoteFragment"
         android:name="com.dgparkcode.note.ui.addeditnote.AddEditNoteFragment"
         android:label="AddEditNoteFragment"
-        tools:layout="@layout/fragment_add_edit_note" />
+        tools:layout="@layout/fragment_add_edit_note" >
+        <argument
+            android:name="noteId"
+            app:argType="long" />
+    </fragment>
 </navigation>
