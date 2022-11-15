@@ -19,4 +19,7 @@ interface NoteEntityDao {
 
     @Delete
     suspend fun deleteNoteEntity(noteEntity: NoteEntity)
+
+    @Query("SELECT id, title, content FROM note WHERE id = :id LIMIT 1")
+    suspend fun getNoteEntity(id: Long): NoteEntity?
 }
