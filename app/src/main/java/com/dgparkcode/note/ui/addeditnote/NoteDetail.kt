@@ -1,15 +1,15 @@
-package com.dgparkcode.note.ui.notelist
+package com.dgparkcode.note.ui.addeditnote
 
 import com.dgparkcode.note.domain.entity.Note
 
-data class NoteItem(
+data class NoteDetail(
     val id: Long,
     val title: String,
     val content: String
 )
 
-fun Note.toNoteItem(): NoteItem {
-    return NoteItem(
+fun Note.toNoteDetail(): NoteDetail {
+    return NoteDetail(
         id = id,
         title = title,
         content = content

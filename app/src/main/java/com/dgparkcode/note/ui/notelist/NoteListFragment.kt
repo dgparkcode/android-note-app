@@ -1,18 +1,20 @@
 package com.dgparkcode.note.ui.notelist
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.dgparkcode.note.R
 import com.dgparkcode.note.databinding.FragmentNoteListBinding
+import com.dgparkcode.note.ui.extension.showOrHide
 import com.dgparkcode.note.ui.viewmodel.NoteListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -35,45 +37,59 @@ class NoteListFragment : Fragment(R.layout.fragment_note_list) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.rvNoteList.addItemDecoration(
-            DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
-        )
-        binding.rvNoteList.adapter = NoteItemListAdapter()
-            .also { adapter ->
-                noteItemListAdapter = adapter
-            }
+        setupNoteList()
+
+        binding.fabAddNote.setOnClickListener {
+            moveToAddEditNote()
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                noteListViewModel.noteListUiState.collect { state ->
-                    if (state.isLoading) {
-                        binding.progressBar.show()
-                    } else {
-                        binding.progressBar.hide()
+                noteListViewModel.uiState.collect { state ->
+                    binding.progressBar.showOrHide(state.isLoading)
+
+                    state.userMessage?.let { userMsg ->
+                        Toast.makeText(
+                            requireContext(),
+                            userMsg.message,
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        noteListViewModel.event(NoteListEvent.UserMessageShown)
                     }
 
-                    if (state.userMessage != null) {
-                        Log.d(TAG, "onViewCreated: user message received. message: ${state.userMessage.message}")
-
-                        noteListViewModel.userMessageShown(
-                            state.userMessage.id
-                        )
-                    }
-
-                    noteItemListAdapter.submitList(
-                        state.noteItems
-                    )
+                    noteItemListAdapter.submitList(state.noteItems)
                 }
             }
         }
     }
 
+    private fun setupNoteList() {
+        with(binding.rvNoteList) {
+            addItemDecoration(
+                DividerItemDecoration(
+                    requireContext(),
+                    DividerItemDecoration.VERTICAL
+                )
+            )
+            adapter = NoteItemListAdapter { noteItem ->
+                moveToAddEditNote(noteItem.id)
+            }.also {
+                noteItemListAdapter = it
+            }
+        }
+    }
+
+    private fun moveToAddEditNote(noteId: Long? = null) {
+        findNavController().navigate(
+            NoteListFragmentDirections.actionNoteListFragmentToAddEditNoteFragment(
+                noteId ?: 0L
+            )
+        )
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    companion object {
-        const val TAG = "NoteListFragment"
     }
 }
