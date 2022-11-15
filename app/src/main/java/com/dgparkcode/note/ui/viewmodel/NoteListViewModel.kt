@@ -29,20 +29,20 @@ class NoteListViewModel @Inject constructor(
     fun event(event: NoteListEvent) {
         when (event) {
             NoteListEvent.LoadNotes -> loadNotes()
-            NoteListEvent.UserMessageShown -> removeUserMessage()
-        }
-    }
-
-    private fun removeUserMessage() {
-        viewModelScope.launch {
-            _uiState.update { state ->
-                state.copy(userMessage = null)
+            NoteListEvent.UserMessageShown -> {
+                _uiState.update { state ->
+                    state.copy(userMessage = null)
+                }
             }
         }
     }
 
     private fun loadNotes() {
         viewModelScope.launch {
+            _uiState.update { state ->
+                state.copy(isLoading = true)
+            }
+
             try {
                 getAllNotesUseCase().collect { notes ->
                     _uiState.update { state ->
