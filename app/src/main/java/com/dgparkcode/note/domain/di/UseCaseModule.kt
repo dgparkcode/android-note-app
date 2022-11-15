@@ -29,4 +29,10 @@ object UseCaseModule {
     fun provideRemoveNoteUseCase(noteRepository: NoteRepository): RemoveNoteUseCase {
         return RemoveNoteUseCaseImpl(noteRepository)
     }
+
+    @Singleton
+    @Provides
+    fun provideGetNoteUseCase(noteRepository: NoteRepository): GetNoteUseCase {
+        return GetNoteUseCaseImpl(noteRepository)
+    }
 }
