@@ -9,4 +9,6 @@ sealed class AddEditNoteEvent {
     object UserMessageShown : AddEditNoteEvent()
 
     data class SaveNote(val title: String, val content: String) : AddEditNoteEvent()
+
+    object DeleteNote : AddEditNoteEvent()
 }

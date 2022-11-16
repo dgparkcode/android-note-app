@@ -58,6 +58,10 @@ class AddEditNoteFragment : Fragment(R.layout.fragment_add_edit_note) {
                         findNavController().navigateUp()
                     }
 
+                    if (state.isDeleted) {
+                        findNavController().navigateUp()
+                    }
+
                     state.noteDetail?.let { note ->
                         binding.tieTitle.setText(note.title)
                         binding.tieContent.setText(note.content)
@@ -122,6 +126,7 @@ class AddEditNoteFragment : Fragment(R.layout.fragment_add_edit_note) {
                         true
                     }
                     R.id.action_remove -> {
+                        addEditNoteViewModel.event(AddEditNoteEvent.DeleteNote)
                         true
                     }
                     else -> false

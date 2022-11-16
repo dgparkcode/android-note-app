@@ -72,11 +72,16 @@ class NoteListFragment : Fragment(R.layout.fragment_note_list) {
                     DividerItemDecoration.VERTICAL
                 )
             )
-            adapter = NoteItemListAdapter { noteItem ->
-                moveToAddEditNote(noteItem.id)
-            }.also {
-                noteItemListAdapter = it
-            }
+            adapter = NoteItemListAdapter(
+                onItemClick = { note ->
+                    moveToAddEditNote(note.id)
+                },
+                onDeleteClick = { note ->
+                    noteListViewModel.event(
+                        NoteListEvent.RemoveNote(note.id)
+                    )
+                }
+            ).also { noteItemListAdapter = it }
         }
     }
 

@@ -7,6 +7,7 @@ import com.dgparkcode.note.domain.entity.Note
 import com.dgparkcode.note.domain.error.InvalidNoteException
 import com.dgparkcode.note.domain.usecase.AddNoteUseCase
 import com.dgparkcode.note.domain.usecase.GetNoteUseCase
+import com.dgparkcode.note.domain.usecase.RemoveNoteUseCase
 import com.dgparkcode.note.ui.addeditnote.AddEditNoteEvent
 import com.dgparkcode.note.ui.addeditnote.AddEditNoteState
 import com.dgparkcode.note.ui.addeditnote.toNoteDetail
@@ -23,7 +24,8 @@ import javax.inject.Inject
 class AddEditNoteViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val getNoteUseCase: GetNoteUseCase,
-    private val addNoteUseCase: AddNoteUseCase
+    private val addNoteUseCase: AddNoteUseCase,
+    private val removeNoteUseCase: RemoveNoteUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AddEditNoteState())
@@ -87,6 +89,35 @@ class AddEditNoteViewModel @Inject constructor(
                                     message = e.localizedMessage ?: "error"
                                 )
                             )
+                        }
+                    }
+                }
+            }
+            AddEditNoteEvent.DeleteNote -> {
+                savedStateHandle.get<Long>(NOTE_ID)?.let { id ->
+                    _uiState.update { state ->
+                        state.copy(isLoading = true)
+                    }
+
+                    viewModelScope.launch {
+                        try {
+                            removeNoteUseCase(id)
+
+                            _uiState.update { state ->
+                                state.copy(
+                                    isLoading = false,
+                                    isDeleted = true
+                                )
+                            }
+                        } catch (e: Exception) {
+                            _uiState.update { state ->
+                                state.copy(
+                                    isLoading = false,
+                                    userMessage = UserMessage(
+                                        message = e.localizedMessage ?: "error"
+                                    )
+                                )
+                            }
                         }
                     }
                 }
