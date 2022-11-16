@@ -3,4 +3,5 @@
     <string name="note_title_hint">Title</string>
     <string name="note_content_hint">Content</string>
     <string name="save_action_label">Save</string>
+    <string name="remove_action_label">Remove</string>
 </resources>
