@@ -1,7 +1,6 @@
 package com.dgparkcode.note.data.local.dao
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -17,8 +16,8 @@ interface NoteEntityDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNoteEntity(noteEntity: NoteEntity)
 
-    @Delete
-    suspend fun deleteNoteEntity(noteEntity: NoteEntity)
+    @Query("DELETE FROM note WHERE id = :id")
+    suspend fun deleteNoteEntity(id: Long)
 
     @Query("SELECT id, title, content FROM note WHERE id = :id LIMIT 1")
     suspend fun getNoteEntity(id: Long): NoteEntity?
