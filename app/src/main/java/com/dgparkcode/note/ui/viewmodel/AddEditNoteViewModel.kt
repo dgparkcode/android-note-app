@@ -96,7 +96,10 @@ class AddEditNoteViewModel @Inject constructor(
 
     private fun loadNote(id: Long) {
         _uiState.update { state ->
-            state.copy(isLoading = true)
+            state.copy(
+                isLoading = true,
+                isDeletable = false
+            )
         }
 
         viewModelScope.launch {
@@ -105,6 +108,7 @@ class AddEditNoteViewModel @Inject constructor(
                     _uiState.update { state ->
                         state.copy(
                             isLoading = false,
+                            isDeletable = true,
                             noteDetail = note.toNoteDetail()
                         )
                     }

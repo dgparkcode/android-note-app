@@ -74,8 +74,17 @@ class AddEditNoteFragment : Fragment(R.layout.fragment_add_edit_note) {
 
                         addEditNoteViewModel.event(AddEditNoteEvent.UserMessageShown)
                     }
+
+                    showDeleteMenuIfDeletableNote(state.isDeletable)
                 }
             }
+        }
+    }
+
+    private fun showDeleteMenuIfDeletableNote(deletable: Boolean) {
+        val menus = binding.toolbar.root.menu
+        menus.findItem(R.id.action_remove)?.let { menuItem ->
+            menuItem.isVisible = deletable
         }
     }
 
@@ -102,16 +111,21 @@ class AddEditNoteFragment : Fragment(R.layout.fragment_add_edit_note) {
         with(binding.toolbar.root) {
             inflateMenu(R.menu.add_edit_note)
             setOnMenuItemClickListener { menuItem ->
-                if (menuItem.itemId == R.id.action_save) {
-                    addEditNoteViewModel.event(
-                        AddEditNoteEvent.SaveNote(
-                            title = binding.tieTitle.text?.toString() ?: "",
-                            content = binding.tieContent.text?.toString() ?: ""
+                return@setOnMenuItemClickListener when(menuItem.itemId) {
+                    R.id.action_save -> {
+                        addEditNoteViewModel.event(
+                            AddEditNoteEvent.SaveNote(
+                                title = binding.tieTitle.text?.toString() ?: "",
+                                content = binding.tieContent.text?.toString() ?: ""
+                            )
                         )
-                    )
-                    return@setOnMenuItemClickListener true
+                        true
+                    }
+                    R.id.action_remove -> {
+                        true
+                    }
+                    else -> false
                 }
-                return@setOnMenuItemClickListener false
             }
         }
     }
