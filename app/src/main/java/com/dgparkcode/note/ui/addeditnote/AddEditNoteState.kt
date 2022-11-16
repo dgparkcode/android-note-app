@@ -6,5 +6,6 @@ data class AddEditNoteState(
     val isLoading: Boolean = false,
     val isSaved: Boolean = false,
     val noteDetail: NoteDetail? = null,
-    val userMessage: UserMessage? = null
+    val userMessage: UserMessage? = null,
+    val isDeletable: Boolean = false
 )
