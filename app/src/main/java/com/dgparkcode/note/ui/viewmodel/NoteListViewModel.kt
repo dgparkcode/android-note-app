@@ -3,6 +3,7 @@ package com.dgparkcode.note.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dgparkcode.note.domain.usecase.GetAllNotesUseCase
+import com.dgparkcode.note.domain.usecase.RemoveNoteUseCase
 import com.dgparkcode.note.ui.common.UserMessage
 import com.dgparkcode.note.ui.notelist.NoteListEvent
 import com.dgparkcode.note.ui.notelist.NoteListState
@@ -16,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NoteListViewModel @Inject constructor(
-    private val getAllNotesUseCase: GetAllNotesUseCase
+    private val getAllNotesUseCase: GetAllNotesUseCase,
+    private val removeNoteUseCase: RemoveNoteUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(NoteListState())
@@ -32,6 +34,30 @@ class NoteListViewModel @Inject constructor(
             NoteListEvent.UserMessageShown -> {
                 _uiState.update { state ->
                     state.copy(userMessage = null)
+                }
+            }
+            is NoteListEvent.RemoveNote -> {
+                viewModelScope.launch {
+                    _uiState.update { state ->
+                        state.copy(isLoading = true)
+                    }
+
+                    try {
+                        removeNoteUseCase(event.id)
+
+                        _uiState.update { state ->
+                            state.copy(isLoading = false)
+                        }
+                    } catch (e: Exception) {
+                        _uiState.update { state ->
+                            state.copy(
+                                isLoading = false,
+                                userMessage = UserMessage(
+                                    message = e.localizedMessage ?: "error"
+                                )
+                            )
+                        }
+                    }
                 }
             }
         }
