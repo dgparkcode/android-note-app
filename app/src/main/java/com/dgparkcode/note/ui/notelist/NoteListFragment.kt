@@ -11,7 +11,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DividerItemDecoration
 import com.dgparkcode.note.R
 import com.dgparkcode.note.databinding.FragmentNoteListBinding
 import com.dgparkcode.note.ui.extension.showOrHide
@@ -66,12 +65,6 @@ class NoteListFragment : Fragment(R.layout.fragment_note_list) {
 
     private fun setupNoteList() {
         with(binding.rvNoteList) {
-            addItemDecoration(
-                DividerItemDecoration(
-                    requireContext(),
-                    DividerItemDecoration.VERTICAL
-                )
-            )
             adapter = NoteItemListAdapter(
                 onItemClick = { note ->
                     moveToAddEditNote(note.id)
