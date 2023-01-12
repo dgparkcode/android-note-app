@@ -1,4 +1,4 @@
-package com.dgparkcode.note.ui.theme
+package com.dgparkcode.note.common.theme
 
 import androidx.compose.ui.graphics.Color
 
