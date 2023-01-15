@@ -1,4 +1,4 @@
-package com.dgparkcode.note.common.theme
+package com.dgparkcode.note.common.ui.theme
 
 import android.app.Activity
 import android.os.Build
